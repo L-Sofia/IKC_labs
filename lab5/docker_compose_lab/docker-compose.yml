@@ -1,0 +1,30 @@
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./app:/var/www/html
+    depends_on:
+      - php
+
+  php:
+    image: php:8.2-fpm
+    volumes:
+      - ./app:/var/www/html
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: webdb
+      MYSQL_USER: webuser
+      MYSQL_PASSWORD: webpass
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
